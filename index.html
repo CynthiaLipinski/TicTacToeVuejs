@@ -1,0 +1,71 @@
+<!-- Followed tutorial from Domenic Corso https://www.youtube.com/watch?v=rqb4FgVNrrM 2020-07-02 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Tic Tac Toe</h2>
+    <div id="game-view">
+        <div id="game-view-info">
+            {{ infoMessage}}
+        </div>
+        <div :key="resetKey" id="game-view-squares">
+
+
+            <div v-for="(square, i) in squares" v-on:click="activeGame.makeMove(i)" v-bind:class="{highlighted: square.isHighlighted}" class="game-view-square">
+
+                {{ square.value}}
+            </div>
+
+        </div><button type="button" v-on:click="reset">Reset</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="square.js"></script>
+    <script src="game.js"></script>
+    <script type="text/javascript">
+        let activeGame = new Game();
+        let resetKey = 0;
+        let gameVue = new Vue({
+            el: '#game-view',
+            data: activeGame,
+            resetKey: 0,
+            methods: {
+                reset() {
+                    this.resetKey += 1;
+                }
+            },
+            computed: {
+                infoMessage: function() {
+                    if (this.inProgress) {
+                        return this.currentTurn + 's turn!';
+                    }
+
+                    if (this.winner) {
+                        this.activeGame = new Game();
+                        return this.winner + ' wins!';
+
+                    }
+
+                    if (!this.winner && !this.inProgress) {
+                        this.activeGame = new Game();
+                        return 'It was a draw!';
+
+                    }
+                },
+                wins: function() {
+                    return this.xWins + " " + this.oWins;
+                }
+
+            }
+        });
+
+    </script>
+</body>
+
+</html>
